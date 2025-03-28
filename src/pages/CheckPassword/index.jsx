@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaRegCircleUser } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
