@@ -32,47 +32,43 @@ const SearchUser = ({ onClose }) => {
 
   console.log("searchUser 30303030", searchUser);
   return (
-    <div className="fixed top-0 bottom-0 left-0 right-0 bg-gray-700 opacity-40 p-2">
-      <div className="w-full max-w-lg mx-auto mt-10">
-        {/* input searchUser */}
-        <div className="bg-white rounded h-14 overflow-hidden flex items-center">
+    <div className="fixed inset-0  bg-opacity-40 z-50 flex items-start justify-center p-4">
+      {/* Close Button */}
+      <button
+        className="absolute top-0 right-0 text-gray-600 hover:text-white p-2 text-2xl"
+        onClick={onClose}
+      >
+        <IoClose size={28} />
+      </button>
+      <div className="relative w-full max-w-lg mt-20 space-y-4">
+        {/* Search Input */}
+        <div className="bg-white rounded h-14 overflow-hidden flex items-center shadow">
           <input
             type="text"
-            placeholder="search user by name, email...."
-            className="w-full outline-none py-1 h-full px-4"
+            placeholder="Search user by name, email..."
+            className="w-full h-full px-4 py-2 outline-none"
             onChange={(e) => setSearch(e.target.value)}
             value={search}
           />
-          <div className="h-14 w-14 flex items-center justify-center">
-            <IoSearchOutline />
+          <div className="h-14 w-14 flex items-center justify-center text-gray-500">
+            <IoSearchOutline size={22} />
           </div>
         </div>
-        {/* display search user */}
 
-        <div className="bg-white mt-2 w-full p-4 rounded">
-          {/* no user found */}
-          {searchUser.length === 0 && !loading && (
-            <div>
-              <p className="text-center text-slate-500">no user found!</p>
-            </div>
-          )}
-
+        {/* Results */}
+        <div className="bg-white rounded shadow p-4 space-y-2 max-h-[60vh] overflow-y-auto">
           {loading && <CircularLoading />}
 
-          {searchUser.length !== 0 &&
-            !loading &&
-            searchUser.map((user, index) => {
-              return <UserCard key={user._id} user={user} onClose={onClose} />;
-            })}
+          {!loading && searchUser.length === 0 && (
+            <p className="text-center text-slate-500">No user found!</p>
+          )}
+
+          {!loading &&
+            searchUser.length > 0 &&
+            searchUser.map((user) => (
+              <UserCard key={user._id} user={user} onClose={onClose} />
+            ))}
         </div>
-      </div>
-      <div>
-        <button
-          className="absolute top-0 right-0 text-lg p-2 lg:text-4xl hover:text-white"
-          onClick={onClose}
-        >
-          <IoClose size={25} />
-        </button>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { IoIosVideocam } from "react-icons/io";
 import uploadFile from "../../helpers/uploadFile";
 import { IoClose } from "react-icons/io5";
 import CircularLoading from "../CircularLoading";
+import backgroundImage from "../../assets/wallpaper.jpeg";
 const MessagePage = () => {
   const params = useParams();
   const socketConnection = useSelector(
@@ -105,7 +106,7 @@ const MessagePage = () => {
   };
 
   return (
-    <div className="page-container">
+    <div style={{ backgroundImage: `url(Z=-)` }} className="page-container">
       <header className="sticky top-0 h-16 bg-white flex items-center justify-between px-4 border-b">
         <div className="flex items-center">
           <Link to={"/"} className="lg:hidden mr-4">
