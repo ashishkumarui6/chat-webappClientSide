@@ -8,7 +8,7 @@ import { FiPlus } from "react-icons/fi";
 import { FaImage } from "react-icons/fa6";
 import { IoIosVideocam } from "react-icons/io";
 import uploadFile from "../../helpers/uploadFile";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoSend, IoSendOutline } from "react-icons/io5";
 import CircularLoading from "../CircularLoading";
 import backgroundImage from "../../assets/wallpaper.jpeg";
 const MessagePage = () => {
@@ -105,8 +105,49 @@ const MessagePage = () => {
     });
   };
 
+  const handleOchange = (e) => {
+    const { name, value } = e.target;
+
+    setMessage((preve) => {
+      return {
+        ...preve,
+        text: value,
+      };
+    });
+  };
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+
+    // Ensure message content is not just whitespace
+    const trimmedText = message.text?.trim();
+
+    if (trimmedText || message.imageUrl || message.videoUrl) {
+      if (socketConnection) {
+        try {
+          socketConnection.emit("new message", {
+            sender: user?._id,
+            receiver: params.userId,
+            text: trimmedText,
+            imageUrl: message.imageUrl,
+            videoUrl: message.videoUrl,
+          });
+        } catch (error) {
+          console.error("Error sending message:", error);
+        }
+      } else {
+        console.warn("Socket connection is not available.");
+      }
+    } else {
+      console.warn("Cannot send an empty message.");
+    }
+  };
+
   return (
-    <div style={{ backgroundImage: `url(Z=-)` }} className="page-container">
+    <div
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+      className="page-container"
+    >
       <header className="sticky top-0 h-16 bg-white flex items-center justify-between px-4 border-b">
         <div className="flex items-center">
           <Link to={"/"} className="lg:hidden mr-4">
@@ -238,6 +279,21 @@ const MessagePage = () => {
             </div>
           )}
         </div>
+        {/* input box  */}
+        <form onSubmit={handleSendMessage} className="h-full w-full px-2 py-2">
+          <div className="flex items-center h-full w-full bg-gray-100 rounded-full px-4 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              className="flex-1 bg-transparent outline-none text-sm placeholder-gray-500"
+              value={message.text}
+              onChange={handleOchange}
+            />
+            <button className="text-blue-600 hover:text-blue-800 transition ml-2">
+              <IoSendOutline size={20} />
+            </button>
+          </div>
+        </form>
       </section>
     </div>
   );

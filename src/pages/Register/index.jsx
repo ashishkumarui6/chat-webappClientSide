@@ -4,7 +4,9 @@ import { Link, useNavigate } from "react-router";
 import uploadFile from "../../helpers/uploadFile";
 import axios from "axios";
 import toast from "react-hot-toast";
+import CircularLoading from "../../components/CircularLoading";
 const Register = () => {
+  const [Loading, setLoading] = useState(false);
   const [data, setData] = useState({
     name: "",
     phone: "",
@@ -27,7 +29,6 @@ const Register = () => {
       const response = await axios.post(URL, data);
       console.log("response", response);
       toast.success(response?.data?.message);
-
       if (response?.data?.success) {
         setData({
           name: "",
@@ -56,7 +57,9 @@ const Register = () => {
 
   const handleUploadPhoto = async (e) => {
     const file = e.target.files[0];
+    setLoading(true);
     const uploadPhoto = await uploadFile(file);
+    setLoading(false);
     console.log("uploadPhoto", uploadPhoto);
     setUploadPhoto(file);
     setData((preve) => {
@@ -76,6 +79,11 @@ const Register = () => {
   return (
     <>
       <div className="mt-5">
+        {Loading && (
+          <div className=" w-full h-full flex justify-center items-center fixed">
+            <CircularLoading />
+          </div>
+        )}
         <div className="bg-white w-full max-w-md mx:2 rounded overflow-hidden p-4 md:mx-auto">
           <h3>Welcome to Chat app!</h3>
           <form onSubmit={handleSubmit} className="grid gap-4">
